@@ -112,31 +112,40 @@ function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative h-[600px] bg-gradient-to-r from-blue-900 to-blue-700 overflow-hidden">
+      <section className="relative h-[600px] bg-gradient-to-r from-blue-800 to-blue-900 overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxpbmR1c3RyaWFsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc1NDgyMzg5Nnww&ixlib=rb-4.1.0&q=85"
             alt="Industrial Equipment"
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-20"
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <div className="text-white max-w-2xl">
-            <h1 className="text-5xl font-bold mb-6 leading-tight">
-              Équipements Industriels de Qualité Professionnelle
-            </h1>
+            <div className="flex items-center mb-4">
+              <div className="bg-white/10 backdrop-blur-sm p-3 rounded-lg mr-4">
+                <div className="text-white font-bold text-2xl">NC</div>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold">NEGOCE COOPERATION</h1>
+                <p className="text-blue-200 text-sm tracking-wider">ÉQUIPEMENTS INDUSTRIELS</p>
+              </div>
+            </div>
+            <h2 className="text-4xl font-bold mb-6 leading-tight">
+              Votre Partenaire de Confiance en Équipements Industriels
+            </h2>
             <p className="text-xl mb-8 opacity-90">
-              Partenaire de confiance pour tous vos besoins en équipements industriels. 
+              Spécialiste de la fourniture d'équipements industriels de qualité professionnelle. 
               Schneider Electric, ABB, Siemens, Festo et bien plus encore.
             </p>
             <div className="flex space-x-4">
               <Link to="/catalog">
-                <Button size="lg" className="bg-white text-blue-900 hover:bg-gray-100 px-8 py-4 text-lg">
-                  Voir le Catalogue
+                <Button size="lg" className="bg-white text-blue-900 hover:bg-gray-100 px-8 py-4 text-lg font-semibold">
+                  Découvrir nos Produits
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 text-lg">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 text-lg font-semibold">
                   Nous Contacter
                 </Button>
               </Link>
