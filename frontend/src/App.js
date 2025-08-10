@@ -158,7 +158,7 @@ function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Pourquoi Choisir NegoceCooperation ?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Pourquoi Choisir NEGOCE COOPERATION ?</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Nous sommes votre partenaire de confiance pour tous vos projets industriels
             </p>
