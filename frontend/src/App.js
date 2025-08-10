@@ -591,7 +591,7 @@ function AdminDashboard() {
                     <TableCell>
                       <div className="flex space-x-2">
                         <Select 
-                          value={order.status} 
+                          value={order.status || "en_preparation"} 
                           onValueChange={(value) => updateOrderStatus(order.id, value)}
                         >
                           <SelectTrigger className="w-40">
