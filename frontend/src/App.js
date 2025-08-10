@@ -231,24 +231,24 @@ function Catalog({ addToCart }) {
               />
             </div>
             
-            <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+            <Select value={selectedBrand || "all"} onValueChange={(value) => setSelectedBrand(value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Toutes les marques" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les marques</SelectItem>
+                <SelectItem value="all">Toutes les marques</SelectItem>
                 {brands.map(brand => (
                   <SelectItem key={brand} value={brand}>{brand}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
             
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select value={selectedCategory || "all"} onValueChange={(value) => setSelectedCategory(value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Toutes les catégories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les catégories</SelectItem>
+                <SelectItem value="all">Toutes les catégories</SelectItem>
                 {categories.map(category => (
                   <SelectItem key={category} value={category}>{category}</SelectItem>
                 ))}
