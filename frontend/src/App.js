@@ -677,7 +677,7 @@ function About() {
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
           <h2 className="text-2xl font-semibold mb-4">Notre Mission</h2>
           <p className="text-gray-600 mb-6">
-            IndustriePro est votre partenaire de confiance dans le domaine des équipements industriels. 
+            NegoceCooperation est votre partenaire de confiance dans le domaine des équipements industriels. 
             Nous nous engageons à fournir des solutions de qualité professionnelle pour tous vos besoins industriels.
           </p>
           
