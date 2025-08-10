@@ -1,7 +1,36 @@
+/* Custom color palette for NEGOCE COOPERATION */
+:root {
+  --nc-primary: #1e40af;      /* Blue-700 */
+  --nc-primary-dark: #1e3a8a;  /* Blue-800 */
+  --nc-primary-light: #3b82f6; /* Blue-500 */
+  --nc-secondary: #64748b;      /* Slate-500 */
+  --nc-accent: #0ea5e9;         /* Sky-500 */
+  --nc-success: #059669;        /* Emerald-600 */
+  --nc-warning: #d97706;        /* Amber-600 */
+}
+
 .App {
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
+
+/* NC Logo styling */
+.nc-logo {
+  background: linear-gradient(135deg, var(--nc-primary) 0%, var(--nc-primary-dark) 100%);
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Professional color scheme */
+.bg-nc-primary { background-color: var(--nc-primary); }
+.bg-nc-primary-dark { background-color: var(--nc-primary-dark); }
+.text-nc-primary { color: var(--nc-primary); }
+.border-nc-primary { border-color: var(--nc-primary); }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -13,12 +42,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--nc-secondary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--nc-primary);
 }
 
 /* Smooth transitions */
@@ -58,6 +87,11 @@
 .btn-primary {
   position: relative;
   overflow: hidden;
+  background-color: var(--nc-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--nc-primary-dark);
 }
 
 .btn-primary::before {
@@ -75,13 +109,13 @@
   left: 100%;
 }
 
-/* Custom gradient backgrounds */
-.gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Professional gradient backgrounds */
+.gradient-bg-nc {
+  background: linear-gradient(135deg, var(--nc-primary) 0%, var(--nc-primary-dark) 100%);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.gradient-text-nc {
+  background: linear-gradient(135deg, var(--nc-primary) 0%, var(--nc-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -116,7 +150,7 @@
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--nc-primary);
   outline-offset: 2px;
 }
 
@@ -141,9 +175,9 @@ select:focus-visible {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Enhanced shadows */
+/* Enhanced shadows with NC colors */
 .shadow-enhanced {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(30, 64, 175, 0.25);
 }
 
 /* Text shadows for better readability */
@@ -158,6 +192,13 @@ select:focus-visible {
 
 /* Improved form styling */
 .form-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--nc-primary);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+/* Professional header styling */
+.nc-header {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(30, 64, 175, 0.1);
 }
