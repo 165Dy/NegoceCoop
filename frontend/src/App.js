@@ -35,7 +35,7 @@ function Header({ cartCount, isAdmin, setIsAdmin }) {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Package className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">IndustriePro</span>
+            <span className="text-xl font-bold text-gray-900">NegoceCooperation</span>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
