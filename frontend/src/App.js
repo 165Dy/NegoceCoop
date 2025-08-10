@@ -33,9 +33,14 @@ function Header({ cartCount, isAdmin, setIsAdmin }) {
     <header className="bg-white shadow-lg border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <Package className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">NegoceCooperation</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-2 rounded-lg shadow-lg">
+              <div className="text-white font-bold text-lg">NC</div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900">NEGOCE COOPERATION</span>
+              <span className="text-xs text-gray-600 tracking-wider">ÉQUIPEMENTS INDUSTRIELS</span>
+            </div>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
