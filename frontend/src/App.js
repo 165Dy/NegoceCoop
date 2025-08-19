@@ -9,24 +9,68 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from './components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table';
+import ContactForm from './components/ContactForm';
+import emailjs from '@emailjs/browser';
+import { getProductImage } from './data/industrialImages';
 import './App.css';
 
-// Mock data for industrial equipment
+// Mock data for industrial equipment - Images dynamiques selon marque/catégorie
 const industrialEquipment = [
-  { id: 1, name: 'Disjoncteur Schneider Electric', brand: 'Schneider Electric', category: 'Protection électrique', price: 245, image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300', stock: 15 },
-  { id: 2, name: 'Transformateur ABB', brand: 'ABB', category: 'Transformation', price: 1850, image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300', stock: 8 },
-  { id: 3, name: 'Moteur Siemens', brand: 'Siemens', category: 'Motorisation', price: 975, image: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=300', stock: 12 },
-  { id: 4, name: 'Capteur FESTO', brand: 'Festo', category: 'Automatisation', price: 315, image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=300', stock: 25 },
-  { id: 5, name: 'Vérin hydraulique VEGA', brand: 'VEGA', category: 'Hydraulique', price: 680, image: 'https://images.unsplash.com/photo-1581093458791-9d42e98e3d35?w=300', stock: 6 },
-  { id: 6, name: 'Variateur Eaton', brand: 'Eaton', category: 'Contrôle moteur', price: 525, image: 'https://images.unsplash.com/photo-1581093804475-577d72e38aa0?w=300', stock: 18 },
-  { id: 7, name: 'Pompe WEG', brand: 'WEG', category: 'Pompage', price: 1200, image: 'https://images.unsplash.com/photo-1581094289009-9b5bba6e7d68?w=300', stock: 10 },
-  { id: 8, name: 'Roulement SKF', brand: 'SKF', category: 'Mécanique', price: 85, image: 'https://images.unsplash.com/photo-1581094372616-52d93aca466a?w=300', stock: 50 }
+  { id: 1, name: 'Disjoncteur Schneider Electric', brand: 'Schneider Electric', category: 'Protection électrique', price: 245, stock: 15 },
+  { id: 2, name: 'Transformateur ABB', brand: 'ABB', category: 'Transformation', price: 1850, stock: 8 },
+  { id: 3, name: 'Moteur Siemens', brand: 'Siemens', category: 'Motorisation', price: 975, stock: 12 },
+  { id: 4, name: 'Capteur FESTO', brand: 'Festo', category: 'Automatisation', price: 315, stock: 25 },
+  { id: 5, name: 'Vérin hydraulique VEGA', brand: 'VEGA', category: 'Hydraulique', price: 680, stock: 6 },
+  { id: 6, name: 'Variateur Eaton', brand: 'Eaton', category: 'Contrôle moteur', price: 525, stock: 18 },
+  { id: 7, name: 'Pompe WEG', brand: 'WEG', category: 'Pompage', price: 1200, stock: 10 },
+  { id: 8, name: 'Roulement SKF', brand: 'SKF', category: 'Mécanique', price: 85, stock: 50 }
+].map(product => ({
+  ...product,
+  image: getProductImage(product.brand, product.category)
+}));
+
+// Informations des marques avec leurs logos
+const brandsData = [
+  { 
+    name: 'Schneider Electric', 
+    logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Schneider_Electric_2007.svg'
+  },
+  { 
+    name: 'ABB', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/00/ABB_logo.svg'
+  },
+  { 
+    name: 'Siemens', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Siemens-logo.svg'
+  },
+  { 
+    name: 'Festo', 
+    logo: '/images/logos/festo-seeklogo.png'
+  },
+  { 
+    name: 'VEGA', 
+    logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/VEGA_Logo_(2018).svg'
+  },
+  { 
+    name: 'Eaton', 
+    logo: '/images/logos/easton-seeklogo.png'
+  },
+  { 
+    name: 'WEG', 
+    logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Weg_logo_blue_vector.svg'
+  },
+  { 
+    name: 'SKF', 
+    logo: '/images/logos/skf-seeklogo.png'
+  }
 ];
+
+
 
 const brands = ['Schneider Electric', 'ABB', 'Siemens', 'Festo', 'VEGA', 'Eaton', 'WEG', 'SKF'];
 const categories = ['Protection électrique', 'Transformation', 'Motorisation', 'Automatisation', 'Hydraulique', 'Contrôle moteur', 'Pompage', 'Mécanique'];
 
-function Header({ cartCount, isAdmin, setIsAdmin }) {
+function Header({ cartCount }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -48,28 +92,15 @@ function Header({ cartCount, isAdmin, setIsAdmin }) {
             <Link to="/catalog" className="text-gray-700 hover:text-blue-600 transition-colors">Catalogue</Link>
             <Link to="/about" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</Link>
             <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</Link>
-            {isAdmin ? (
-              <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                Dashboard Admin
-              </Link>
-            ) : (
-              <Link to="/cart" className="relative bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
-                <ShoppingCart className="h-5 w-5" />
-                {cartCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs">
-                    {cartCount}
-                  </Badge>
-                )}
-              </Link>
-            )}
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsAdmin(!isAdmin)}
-              className="text-sm"
-            >
-              {isAdmin ? 'Mode Client' : 'Mode Admin'}
-            </Button>
+            <Link to="/cart" className="relative bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+              <ShoppingCart className="h-5 w-5" />
+              {cartCount > 0 && (
+                <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs">
+                  {cartCount}
+                </Badge>
+              )}
+            </Link>
+
           </nav>
 
           <button
@@ -86,21 +117,10 @@ function Header({ cartCount, isAdmin, setIsAdmin }) {
             <Link to="/catalog" className="block py-2 text-gray-700 hover:text-blue-600">Catalogue</Link>
             <Link to="/about" className="block py-2 text-gray-700 hover:text-blue-600">À propos</Link>
             <Link to="/contact" className="block py-2 text-gray-700 hover:text-blue-600">Contact</Link>
-            {isAdmin ? (
-              <Link to="/admin" className="block py-2 text-blue-600 font-medium">Dashboard Admin</Link>
-            ) : (
-              <Link to="/cart" className="block py-2 text-blue-600 font-medium">
-                Panier ({cartCount})
-              </Link>
-            )}
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsAdmin(!isAdmin)}
-              className="mt-2"
-            >
-              {isAdmin ? 'Mode Client' : 'Mode Admin'}
-            </Button>
+            <Link to="/cart" className="block py-2 text-blue-600 font-medium">
+              Panier ({cartCount})
+            </Link>
+
           </div>
         )}
       </div>
@@ -201,9 +221,22 @@ function Home() {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-            {brands.map((brand, index) => (
+            {brandsData.map((brand, index) => (
               <div key={index} className="bg-white p-6 rounded-lg shadow-sm text-center hover:shadow-md transition-shadow">
-                <div className="text-lg font-semibold text-gray-800">{brand}</div>
+                <div className="h-16 flex items-center justify-center mb-4">
+                  <img 
+                    src={brand.logo} 
+                    alt={`Logo ${brand.name}`}
+                    className="max-h-full max-w-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                    onError={(e) => {
+                      // Si le logo ne charge pas, afficher le nom de la marque
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <div className="text-lg font-semibold text-gray-800 hidden">{brand.name}</div>
+                </div>
+                <div className="text-sm font-medium text-gray-600">{brand.name}</div>
               </div>
             ))}
           </div>
@@ -308,6 +341,8 @@ function Catalog({ addToCart }) {
 
 function Cart({ cart, updateQuantity, removeFromCart }) {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [orderForm, setOrderForm] = useState({
     company: '',
     name: '',
@@ -320,23 +355,77 @@ function Cart({ cart, updateQuantity, removeFromCart }) {
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleOrder = () => {
-    const order = {
-      id: Date.now(),
-      items: cart,
-      customer: orderForm,
-      total: total,
-      status: 'en_preparation',
-      date: new Date().toISOString(),
-    };
-
-    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    localStorage.setItem('orders', JSON.stringify([...existingOrders, order]));
-    localStorage.removeItem('cart');
+  const handleOrder = async () => {
+    setIsLoading(true);
     
-    setIsOrderModalOpen(false);
-    alert('Commande envoyée avec succès ! Nous vous contacterons sous peu.');
-    navigate('/');
+    try {
+      const order = {
+        id: Date.now(),
+        items: cart,
+        customer: orderForm,
+        total: total,
+        status: 'en_preparation',
+        date: new Date().toISOString(),
+      };
+
+      // Sauvegarder la commande dans localStorage
+      const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      localStorage.setItem('orders', JSON.stringify([...existingOrders, order]));
+
+      // Préparer les données pour l'email de commande
+      const emailData = {
+        to_email: 'negoce.cooperation@gmail.com',
+        from_name: orderForm.name,
+        from_email: orderForm.email,
+        phone: orderForm.phone,
+        company: orderForm.company,
+        address: orderForm.address,
+        notes: orderForm.notes || 'Aucune note',
+        order_id: order.id,
+        order_date: new Date().toLocaleDateString('fr-FR'),
+        order_total: total.toFixed(2),
+        order_items: cart.map(item => 
+          `${item.name} (${item.brand}) - Quantité: ${item.quantity} - Prix unitaire: ${item.price}€ - Sous-total: ${(item.price * item.quantity).toFixed(2)}€`
+        ).join('\n'),
+        reply_to: orderForm.email,
+      };
+
+      // Envoyer l'email de notification de commande
+      await emailjs.send(
+        'service_lg8gl6b',  // Votre Service ID EmailJS
+        'template_22dghl7', // Template pour les notifications de commande
+        emailData,
+        'oU7b3eiNYDM94S1A2'  // Votre Public Key
+      );
+
+      // Fermer la modale de commande et ouvrir celle de confirmation
+      setIsOrderModalOpen(false);
+      setIsConfirmationModalOpen(true);
+      
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de la commande:', error);
+      alert('Une erreur s\'est produite lors de l\'envoi. Veuillez réessayer ou nous contacter directement.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConfirmationClose = () => {
+    setIsConfirmationModalOpen(false);
+    
+    // Vider le panier et nettoyer le formulaire
+    localStorage.removeItem('cart');
+    setOrderForm({
+      company: '',
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      notes: ''
+    });
+    
+    // Recharger la page pour réinitialiser l'état
+    window.location.reload();
   };
 
   if (cart.length === 0) {
@@ -443,8 +532,45 @@ function Cart({ cart, updateQuantity, removeFromCart }) {
                     value={orderForm.notes}
                     onChange={(e) => setOrderForm({...orderForm, notes: e.target.value})}
                   />
-                  <Button onClick={handleOrder} className="w-full">
-                    Confirmer la commande
+                  <Button onClick={handleOrder} className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Envoi en cours...' : 'Confirmer la commande'}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* Modale de confirmation */}
+            <Dialog open={isConfirmationModalOpen} onOpenChange={() => {}}>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-center text-xl text-green-600">
+                    ✅ Commande enregistrée !
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="text-center py-6">
+                  <div className="mb-6">
+                    <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                      <Check className="h-8 w-8 text-green-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      Merci pour votre commande !
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Votre commande a été enregistrée avec succès. Notre équipe va l'étudier et vous recontacter sous peu pour en discuter des détails.
+                    </p>
+                    <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                      <p className="text-sm text-blue-800">
+                        📋 <strong>Commande transmise</strong><br/>
+                        Votre demande a été transmise à notre équipe commerciale qui vous contactera rapidement.
+                      </p>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      <p><strong>Contact :</strong> +225 07 08 66 22 39</p>
+                      <p><strong>Email :</strong> sales@negocecooperation.com</p>
+                    </div>
+                  </div>
+                  <Button onClick={handleConfirmationClose} className="w-full">
+                    Continuer mes achats
                   </Button>
                 </div>
               </DialogContent>
@@ -671,8 +797,40 @@ function AdminDashboard() {
             </Table>
             
             {orders.length === 0 && (
-              <div className="text-center py-8">
-                <p className="text-gray-600">Aucune commande pour le moment</p>
+              <div className="text-center py-16">
+                <div className="mb-6">
+                  <div className="mx-auto w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <Package className="h-10 w-10 text-gray-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Aucune commande pour l'instant
+                  </h3>
+                  <p className="text-gray-600 max-w-md mx-auto mb-6">
+                    Les commandes de vos clients apparaîtront ici dès qu'ils passeront leurs premières commandes sur le site.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button 
+                      variant="outline" 
+                      className="inline-flex items-center"
+                      onClick={() => window.open('/', '_blank')}
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Voir le site client
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => window.open('/contact', '_blank')}
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Page contact
+                    </Button>
+                  </div>
+                </div>
+                <div className="border-t pt-6">
+                  <p className="text-sm text-gray-500">
+                    💡 <strong>Astuce :</strong> Partagez l'URL de votre site avec vos clients pour qu'ils puissent passer des commandes directement en ligne.
+                  </p>
+                </div>
               </div>
             )}
           </CardContent>
@@ -735,7 +893,7 @@ function Contact() {
                 <Phone className="h-5 w-5 text-blue-600 mr-3" />
                 <div>
                   <p className="font-medium">Téléphone</p>
-                  <p className="text-gray-600">+33 1 23 45 67 89</p>
+                  <p className="text-gray-600">+225 07 08 66 22 39</p>
                 </div>
               </div>
               
@@ -743,7 +901,7 @@ function Contact() {
                 <Mail className="h-5 w-5 text-blue-600 mr-3" />
                 <div>
                   <p className="font-medium">Email</p>
-                  <p className="text-gray-600">contact@industriepro.fr</p>
+                  <p className="text-gray-600">sales@negocecooperation.com</p>
                 </div>
               </div>
               
@@ -752,8 +910,9 @@ function Contact() {
                 <div>
                   <p className="font-medium">Adresse</p>
                   <p className="text-gray-600">
-                    123 Rue de l'Industrie<br/>
-                    69000 Lyon, France
+                    ABOBO LOT 545 ILOT 62<br/>
+                    20 BP 1527 ABJ 20<br/>
+                    ABIDJAN, CÔTE D'IVOIRE
                   </p>
                 </div>
               </div>
@@ -769,18 +928,7 @@ function Contact() {
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-semibold mb-6">Envoyez-nous un message</h2>
-            
-            <form className="space-y-4">
-              <Input placeholder="Nom complet" />
-              <Input placeholder="Email" type="email" />
-              <Input placeholder="Téléphone" />
-              <Input placeholder="Entreprise" />
-              <Textarea placeholder="Votre message" rows={4} />
-              <Button className="w-full">Envoyer le message</Button>
-            </form>
-          </div>
+          <ContactForm />
         </div>
       </div>
     </div>
@@ -789,7 +937,7 @@ function Contact() {
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -838,12 +986,12 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header cartCount={cartCount} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+        <Header cartCount={cartCount} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog addToCart={addToCart} />} />
           <Route path="/cart" element={<Cart cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/Marcel-Kouame/dashboard" element={<AdminDashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
