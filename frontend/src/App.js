@@ -78,21 +78,21 @@ function Header({ cartCount }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link to="/" className="flex items-center space-x-3">
-            <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-2 rounded-lg shadow-lg">
-              <div className="text-white font-bold text-lg">NC</div>
+            <div className="bg-gradient-to-br from-green-600 to-green-800 p-2 rounded-lg shadow-lg">
+              <img src="/images/logos/negoce-coop-logo.svg" alt="N.Coop Logo" className="h-8 w-auto" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-gray-900">NEGOCE COOPERATION</span>
+              <span className="text-xl font-bold text-gray-900" translate="no">NEGOCE COOPERATION</span>
               <span className="text-xs text-gray-600 tracking-wider">ÉQUIPEMENTS INDUSTRIELS</span>
             </div>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Accueil</Link>
-            <Link to="/catalog" className="text-gray-700 hover:text-blue-600 transition-colors">Catalogue</Link>
-            <Link to="/about" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</Link>
-            <Link to="/cart" className="relative bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+            <Link to="/" className="text-gray-700 hover:text-green-600 transition-colors">Accueil</Link>
+            <Link to="/catalog" className="text-gray-700 hover:text-green-600 transition-colors">Catalogue</Link>
+            <Link to="/about" className="text-gray-700 hover:text-green-600 transition-colors">À propos</Link>
+            <Link to="/contact" className="text-gray-700 hover:text-green-600 transition-colors">Contact</Link>
+            <Link to="/cart" className="relative bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
                 <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs">
@@ -113,11 +113,11 @@ function Header({ cartCount }) {
 
         {isMenuOpen && (
           <div className="md:hidden py-4 space-y-2">
-            <Link to="/" className="block py-2 text-gray-700 hover:text-blue-600">Accueil</Link>
-            <Link to="/catalog" className="block py-2 text-gray-700 hover:text-blue-600">Catalogue</Link>
-            <Link to="/about" className="block py-2 text-gray-700 hover:text-blue-600">À propos</Link>
-            <Link to="/contact" className="block py-2 text-gray-700 hover:text-blue-600">Contact</Link>
-            <Link to="/cart" className="block py-2 text-blue-600 font-medium">
+            <Link to="/" className="block py-2 text-gray-700 hover:text-green-600">Accueil</Link>
+            <Link to="/catalog" className="block py-2 text-gray-700 hover:text-green-600">Catalogue</Link>
+            <Link to="/about" className="block py-2 text-gray-700 hover:text-green-600">À propos</Link>
+            <Link to="/contact" className="block py-2 text-gray-700 hover:text-green-600">Contact</Link>
+            <Link to="/cart" className="block py-2 text-green-600 font-medium">
               Panier ({cartCount})
             </Link>
 
@@ -129,26 +129,66 @@ function Header({ cartCount }) {
 }
 
 function Home() {
+  const HERO_IMAGE_INTERVAL_MS = 3000;
+
+  const heroImages = [
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1605152276897-4f618f831968?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1717386255773-1e3037c81788?ixlib=rb-4.1.0"
+  ];
+
+  const getNextImageIndex = (currentIndex, totalImages) => {
+    return currentIndex === totalImages - 1 ? 0 : currentIndex + 1;
+  };
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prevIndex => 
+        getNextImageIndex(prevIndex, heroImages.length)
+      );
+    }, HERO_IMAGE_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative h-[600px] bg-gradient-to-r from-blue-800 to-blue-900 overflow-hidden">
+      {/* Hero Section avec diaporama invisible */}
+      <section className="relative h-[600px] overflow-hidden">
+        {/* Diaporama */}
         <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxpbmR1c3RyaWFsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc1NDgyMzg5Nnww&ixlib=rb-4.1.0&q=85"
-            alt="Industrial Equipment"
-            className="w-full h-full object-cover opacity-20"
-          />
+          {heroImages.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`Équipement industriel ${index + 1}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ transitionTimingFunction: 'ease-in-out' }}
+              onError={(e) => {
+                console.error(`Erreur de chargement image ${index}`, image);
+                e.target.src = 'https://placehold.co/1920x1080?text=Image+Non+Disponible';
+              }}
+            />
+          ))}
+          {/* Arrière-plan semi-transparent pour le texte */}
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
+        
+        {/* Votre contenu textuel existant */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          {/* ... votre contenu actuel ... */}
           <div className="text-white max-w-2xl">
             <div className="flex items-center mb-4">
               <div className="bg-white/10 backdrop-blur-sm p-3 rounded-lg mr-4">
-                <div className="text-white font-bold text-2xl">NC</div>
+                <img src="/images/logos/negoce-coop-logo.svg" alt="N.Coop Logo" className="h-12 w-auto" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold">NEGOCE COOPERATION</h1>
-                <p className="text-blue-200 text-sm tracking-wider">ÉQUIPEMENTS INDUSTRIELS</p>
+                <h1 className="text-3xl font-bold" translate="no">NEGOCE COOPERATION</h1>
+                <p className="text-green-200 text-sm tracking-wider">ÉQUIPEMENTS INDUSTRIELS</p>
               </div>
             </div>
             <h2 className="text-4xl font-bold mb-6 leading-tight">
@@ -160,12 +200,12 @@ function Home() {
             </p>
             <div className="flex space-x-4">
               <Link to="/catalog">
-                <Button size="lg" className="bg-white text-blue-900 hover:bg-gray-100 px-8 py-4 text-lg font-semibold">
+                <Button size="lg" className="bg-green-600 text-white hover:bg-green-700 px-8 py-4 text-lg font-semibold">
                   Découvrir nos Produits
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 text-lg font-semibold">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-green-600 hover:border-green-600 px-8 py-4 text-lg font-semibold">
                   Nous Contacter
                 </Button>
               </Link>
@@ -178,7 +218,7 @@ function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Pourquoi Choisir NEGOCE COOPERATION ?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Pourquoi Choisir <span translate="no">NEGOCE COOPERATION</span> ?</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Nous sommes votre partenaire de confiance pour tous vos projets industriels
             </p>
@@ -187,7 +227,7 @@ function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
-                <Package className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Package className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-4">Large Sélection</h3>
                 <p className="text-gray-600">Plus de 10 000 références des plus grandes marques industrielles</p>
               </CardContent>
@@ -195,7 +235,7 @@ function Home() {
             
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
-                <Truck className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Truck className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-4">Livraison Rapide</h3>
                 <p className="text-gray-600">Expédition sous 24h et suivi en temps réel de vos commandes</p>
               </CardContent>
@@ -203,7 +243,7 @@ function Home() {
             
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
-                <Users className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Users className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-4">Support Expert</h3>
                 <p className="text-gray-600">Équipe technique spécialisée pour vous conseiller</p>
               </CardContent>
@@ -318,7 +358,7 @@ function Catalog({ addToCart }) {
                 <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
                 <p className="text-gray-600 text-sm mb-2">{product.category}</p>
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-2xl font-bold text-blue-600">{product.price}€</span>
+                  <span className="text-2xl font-bold text-green-600">{product.price}€</span>
                   <span className={`text-sm ${product.stock > 10 ? 'text-green-600' : product.stock > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
                     Stock: {product.stock}
                   </span>
@@ -326,7 +366,7 @@ function Catalog({ addToCart }) {
                 <Button 
                   onClick={() => addToCart(product)}
                   disabled={product.stock === 0}
-                  className="w-full"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
                 >
                   {product.stock === 0 ? 'Rupture de stock' : 'Ajouter au panier'}
                 </Button>
@@ -492,7 +532,7 @@ function Cart({ cart, updateQuantity, removeFromCart }) {
             
             <Dialog open={isOrderModalOpen} onOpenChange={setIsOrderModalOpen}>
               <DialogTrigger asChild>
-                <Button size="lg" className="w-full">
+                <Button size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white">
                   Passer la commande
                 </Button>
               </DialogTrigger>
@@ -532,7 +572,7 @@ function Cart({ cart, updateQuantity, removeFromCart }) {
                     value={orderForm.notes}
                     onChange={(e) => setOrderForm({...orderForm, notes: e.target.value})}
                   />
-                  <Button onClick={handleOrder} className="w-full" disabled={isLoading}>
+                  <Button onClick={handleOrder} className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={isLoading}>
                     {isLoading ? 'Envoi en cours...' : 'Confirmer la commande'}
                   </Button>
                 </div>
@@ -569,7 +609,7 @@ function Cart({ cart, updateQuantity, removeFromCart }) {
                       <p><strong>Email :</strong> sales@negocecooperation.com</p>
                     </div>
                   </div>
-                  <Button onClick={handleConfirmationClose} className="w-full">
+                  <Button onClick={handleConfirmationClose} className="w-full bg-green-600 hover:bg-green-700 text-white">
                     Continuer mes achats
                   </Button>
                 </div>
@@ -844,12 +884,12 @@ function About() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">À Propos de NEGOCE COOPERATION</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">À Propos de <span translate="no">NEGOCE COOPERATION</span></h1>
         
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
           <h2 className="text-2xl font-semibold mb-4">Notre Mission</h2>
           <p className="text-gray-600 mb-6">
-            NEGOCE COOPERATION est votre partenaire de confiance dans le domaine des équipements industriels. 
+            <span translate="no">NEGOCE COOPERATION</span> est votre partenaire de confiance dans le domaine des équipements industriels. 
             Nous nous engageons à fournir des solutions de qualité professionnelle pour tous vos besoins industriels.
           </p>
           
@@ -890,7 +930,7 @@ function Contact() {
             
             <div className="space-y-4">
               <div className="flex items-center">
-                <Phone className="h-5 w-5 text-blue-600 mr-3" />
+                <Phone className="h-5 w-5 text-green-600 mr-3" />
                 <div>
                   <p className="font-medium">Téléphone</p>
                   <p className="text-gray-600">+225 07 08 66 22 39</p>
@@ -898,7 +938,7 @@ function Contact() {
               </div>
               
               <div className="flex items-center">
-                <Mail className="h-5 w-5 text-blue-600 mr-3" />
+                <Mail className="h-5 w-5 text-green-600 mr-3" />
                 <div>
                   <p className="font-medium">Email</p>
                   <p className="text-gray-600">sales@negocecooperation.com</p>
@@ -906,7 +946,7 @@ function Contact() {
               </div>
               
               <div className="flex items-center">
-                <MapPin className="h-5 w-5 text-blue-600 mr-3" />
+                <MapPin className="h-5 w-5 text-green-600 mr-3" />
                 <div>
                   <p className="font-medium">Adresse</p>
                   <p className="text-gray-600">

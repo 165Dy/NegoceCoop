@@ -1,0 +1,62 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f3f4f6;stop-opacity:1" />
+    </linearGradient>
+    <style>
+      .logo-text {
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        fill: url(#textGradient);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+      .accent-dot {
+        fill: #fbbf24;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      }
+      .accent-line {
+        stroke: #fbbf24;
+        stroke-width: 3;
+        fill: none;
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+      }
+      .logo-shape {
+        fill: #fbbf24;
+        opacity: 0.9;
+      }
+    </style>
+  </defs>
+  
+  <!-- Fond avec gradient moderne -->
+  <rect width="200" height="60" fill="url(#bgGradient)"/>
+  
+  <!-- Forme décorative en arrière-plan -->
+  <path d="M0 0 L200 0 L200 15 Q180 25 160 20 Q140 15 120 20 Q100 25 80 20 Q60 15 40 20 Q20 25 0 20 Z" fill="#1e3a8a" opacity="0.3"/>
+  
+  <!-- Ligne d'accent dorée -->
+  <line x1="0" y1="8" x2="200" y2="8" class="accent-line"/>
+  
+  <!-- Texte NEGOCECOOP unifié -->
+  <text x="12" y="38" class="logo-text">NEGOCECOOP</text>
+  
+  <!-- Point d'accent doré dans le O -->
+  <circle cx="70" cy="28" r="2.5" class="accent-dot"/>
+  
+  <!-- Éléments décoratifs modernes -->
+  <rect x="175" y="15" width="20" height="2" class="logo-shape"/>
+  <rect x="175" y="20" width="15" height="2" class="logo-shape"/>
+  <rect x="175" y="25" width="10" height="2" class="logo-shape"/>
+  
+  <!-- Forme géométrique décorative -->
+  <polygon points="185,35 190,40 185,45 180,40" class="logo-shape"/>
+</svg>
+
