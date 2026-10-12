@@ -1,5 +1,38 @@
 # Guide de Déploiement Production - NegoceCoop
 
+## Déploiement Hostinger via GitHub Actions
+
+Le workflow `.github/workflows/deploy-hostinger.yml` construit le frontend à
+chaque modification de `frontend/` fusionnée dans `main`, puis publie uniquement
+les fichiers de `frontend/build/` sur la branche `deploy/hostinger`. Le fichier
+`frontend/public/.htaccess` est inclus dans ce build pour que les routes React
+comme `/catalog` continuent de fonctionner après rechargement.
+
+### Configuration à faire dans Hostinger
+
+1. Attendez qu'une exécution réussie du workflow crée la branche
+   `deploy/hostinger` dans GitHub.
+2. Dans le déploiement Git de Hostinger, sélectionnez le dépôt `165Dy/NegoceCoop`
+   et remplacez la branche suivie `main` par `deploy/hostinger`.
+3. Gardez `public_html` comme répertoire de publication. La racine de
+   `deploy/hostinger` contient directement `index.html`, `static/`, `images/`
+   et `.htaccess` : ne choisissez pas `frontend/` comme sous-répertoire.
+4. Déclenchez un déploiement Hostinger, puis vérifiez le domaine et les routes
+   `/catalog`, `/about` et `/contact`.
+
+Le workflow utilise le `GITHUB_TOKEN` intégré à GitHub Actions ; aucun mot de
+passe Hostinger, identifiant FTP ou secret supplémentaire n'est nécessaire.
+Hostinger reste chargé de récupérer la branche Git, tandis que GitHub Actions
+effectue le build. Ne supprimez pas l'historique de `deploy/hostinger` : chaque
+publication est ajoutée à cette branche afin que les mises à jour Git restent
+compatibles avec le déploiement Hostinger existant.
+
+Ce déploiement ne publie que le frontend. Le backend FastAPI n'est pas déployé
+par ce workflow. Le site utilise encore des produits de démonstration et
+enregistre les commandes dans le navigateur ; ce déploiement ne fournit donc
+pas de stockage de commandes partagé pour une activité réelle. Vérifiez aussi
+les paramètres et modèles EmailJS avant d'activer les formulaires en production.
+
 ## 📦 Préparation du build de production
 
 ### 1. Vérifications avant build
@@ -40,10 +73,10 @@ npm run build
 
 ## 🌐 Options de déploiement
 
-### Option 1 : Hébergement web classique (Recommandée)
+### Option 1 : Hébergement web classique
 **Exemples :** OVH, Hostinger, Siteground, etc.
 
-1. **Uploadez le contenu du dossier `build/`** dans le dossier web de votre hébergeur
+1. **Uploadez le contenu du dossier `build/`** (pas le dossier `build/` lui-même) dans le dossier web de votre hébergeur
 2. **Configurez le domaine** pour pointer vers ce dossier
 3. **Configurez les redirections** pour React Router
 
